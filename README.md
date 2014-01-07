@@ -1,2 +1,2 @@
-Use loco if you know howto ... (BuerkiGiger)
+Use locafi if you know howto ... (BuerkiGiger)
 
