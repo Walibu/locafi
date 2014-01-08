@@ -9,8 +9,71 @@
     tools:context=".MainActivity" >
 
     <TextView
+        android:id="@+id/textLatitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignTop="@+id/textLatitude"
+        android:text="@string/text_latitude"
+        android:textSize="@dimen/label_text_size" />
+
+    <EditText
+        android:id="@+id/editTextLongitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textLongitude"
+        android:layout_below="@+id/textLongitude"
+        android:ems="10"
+        android:inputType="numberDecimal|numberSigned"
+        android:textSize="@dimen/edit_text_size" />
+
+    <TextView
+        android:id="@+id/textLongitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textLatitude"
+        android:layout_below="@+id/editTextLatitude"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_longitude"
+        android:textSize="@dimen/label_text_size" />
+
+    <Button
+        android:id="@+id/buttonRandom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextLongitude"
+        android:layout_below="@+id/editTextLongitude"
+        android:layout_marginTop="20dp"
+        android:text="@string/button_random"
+        android:textSize="@dimen/button_text_size" />
+
+    <Button
+        android:id="@+id/buttonAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonRandom"
+        android:layout_alignRight="@+id/editTextLongitude"
+        android:text="@string/button_getaddress"
+        android:textSize="@dimen/button_text_size" />
+
+    <TextView
+        android:id="@+id/textAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonRandom"
+        android:layout_below="@+id/buttonRandom"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:id="@+id/editTextLatitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textLatitude"
+        android:layout_below="@+id/textLatitude"
+        android:ems="10"
+        android:inputType="numberDecimal|numberSigned"
+        android:textSize="@dimen/edit_text_size" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>
