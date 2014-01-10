@@ -61,7 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/buttonRandom"
         android:layout_below="@+id/buttonRandom"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textSize="@dimen/title_text_size" />
 
     <EditText
         android:id="@+id/editTextLatitude"

@@ -4,8 +4,13 @@ import java.util.Random;
 
 import ch.buerkigiger.locationfinder.AboutActivity;
 import ch.buerkigiger.locationfinder.R;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +26,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		Button btnRandom = (Button) findViewById(R.id.buttonRandom);
 		btnRandom.setOnClickListener(new OnClickListener() {
 
@@ -38,11 +43,22 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				EditText txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
 				EditText txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
-				
+
 				String strLatitude = txtLatitude.getText().toString();
 				String strLongitude = txtLongitude.getText().toString();
-				
-				if (!strLatitude.isEmpty() && !strLongitude.isEmpty())
+
+				// clear previous address, TODO clear only if position has changed
+				setAddress("");
+
+				if (strLatitude.isEmpty() || strLongitude.isEmpty())
+				{
+					displayMyAlert(R.string.dialog_message_position);
+				}
+				else if (!isNetworkConnected(getBaseContext()))
+				{
+					displayMyAlert(R.string.dialog_message_connection);
+				}
+				else
 				{
 					double latitude = Double.parseDouble(strLatitude);
 					double longitude = Double.parseDouble(strLongitude);
@@ -50,7 +66,7 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -62,16 +78,16 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.action_about:
-	        	navigateToAboutActivity();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.action_about:
+			navigateToAboutActivity();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	private void setRandom() {
 		EditText txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
 		EditText txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
@@ -91,10 +107,31 @@ public class MainActivity extends Activity {
 		TextView txtAddress = (TextView) findViewById(R.id.textAddress);
 		txtAddress.setText(address);
 	}
-	
+
+	private boolean isNetworkConnected(Context context) {
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo network = cm.getActiveNetworkInfo();
+		if (network != null) {
+			return network.isAvailable();
+		}
+		return false;
+	}
+
+	private void displayMyAlert(int messageId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(messageId);
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				// user cancelled the dialog
+			}
+		});
+		// display message
+		builder.create().show();
+	}
+
 	private void navigateToAboutActivity() {
 		Intent intent = new Intent(this, AboutActivity.class);
-		intent.putExtra("mykey", "1");
 		startActivity(intent);
 	}
 }

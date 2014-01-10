@@ -12,5 +12,8 @@
     <string name="author_2">Walter Bürki</string>
     <string name="author_1_email">matthias@giger.net</string>
     <string name="author_2_email">walter@fambu.ch</string>
+    <string name="dialog_message_position">Enter valid position</string>
+    <string name="dialog_message_connection">No internet connection</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

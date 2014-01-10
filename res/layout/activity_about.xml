@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/author_1"
-        android:text="@string/author_1_email" />
+        android:text="@string/author_1_email"
+        android:textSize="@dimen/label_text_size" />
     
     <TextView
         android:id="@+id/author_2"
@@ -39,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/author_2"
-        android:text="@string/author_2_email" />
+        android:text="@string/author_2_email"
+        android:textSize="@dimen/label_text_size" />
 
 </RelativeLayout>
