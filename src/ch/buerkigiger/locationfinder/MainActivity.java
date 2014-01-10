@@ -2,10 +2,13 @@ package ch.buerkigiger.locationfinder;
 
 import java.util.Random;
 
+import ch.buerkigiger.locationfinder.AboutActivity;
 import ch.buerkigiger.locationfinder.R;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -57,6 +60,18 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_about:
+	        	navigateToAboutActivity();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	private void setRandom() {
 		EditText txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
 		EditText txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
@@ -75,5 +90,11 @@ public class MainActivity extends Activity {
 	private void setAddress(String address) {
 		TextView txtAddress = (TextView) findViewById(R.id.textAddress);
 		txtAddress.setText(address);
+	}
+	
+	private void navigateToAboutActivity() {
+		Intent intent = new Intent(this, AboutActivity.class);
+		intent.putExtra("mykey", "1");
+		startActivity(intent);
 	}
 }

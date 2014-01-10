@@ -7,5 +7,10 @@
     <string name="text_longitude">Longitude</string>
     <string name="button_random">Random</string>
     <string name="button_getaddress">Get Address</string>
-    
+    <string name="title_activity_about">About LocationFinder</string>
+    <string name="author_1">Matthias Giger</string>
+    <string name="author_2">Walter Bürki</string>
+    <string name="author_1_email">matthias@giger.net</string>
+    <string name="author_2_email">walter@fambu.ch</string>
+
 </resources>

@@ -1,0 +1,4 @@
+
+2014.01.07  ?:?0    Matthias    Erster Wurf Design, Random und fake Get Address (A1-A3)
+2014.01.07  1:00    Walter      Setup Android Project, and github version management
+2014.01.10  2:30    Walter      About Screen, (A4)
