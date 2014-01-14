@@ -1,9 +1,13 @@
 package ch.buerkigiger.locationfinder;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import ch.buerkigiger.locationfinder.AboutActivity;
 import ch.buerkigiger.locationfinder.R;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +16,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -97,10 +102,31 @@ public class MainActivity extends Activity {
 	}
 
 	private String getAddress(double latitude, double longitude) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("Oberseestrasse 10\r\n");
-		sb.append("8650 Rapperswil\r\n");
-		return sb.toString();
+		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+		try
+		{
+			Log.w("LocationFinder", "before getFromLocation()");
+			List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+			Log.w("LocationFinder", "after getFromLocation(), " + addresses.toString());
+			if (!addresses.isEmpty())
+			{
+				Address address = addresses.get(0);
+				StringBuffer sb = new StringBuffer();
+				for (int i = 0;  i <= address.getMaxAddressLineIndex(); i++)
+				{
+					sb.append(address.getAddressLine(i));
+					sb.append("\r\n");
+				}
+				return sb.toString();
+			}
+		} catch(Exception e) {
+			Log.w("LocationFinder", e.getMessage());
+		}
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("Oberseestrasse 10\r\n");
+//		sb.append("8650 Rapperswil\r\n");
+//		return sb.toString();
+		return "";
 	}
 
 	private void setAddress(String address) {
