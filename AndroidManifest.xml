@@ -29,6 +29,9 @@
             android:name="ch.buerkigiger.locationfinder.AboutActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName="ch.buerkigiger.locationfinder.MainActivity" >
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="ch.buerkigiger.locationfinder.MainActivity" />
         </activity>
     </application>
 
