@@ -4,4 +4,5 @@
 2014.01.10  2:30    Walter      About Screen, (A4)
 2014.01.11  2:00    Walter      Add alertDialog, check internet connection
 2014.01.14  1:30    Matthias    Up-Button, getAddress() implementieren
-2014.01.14  1:30    Walter      KompatibilitŠt 4.0, getAddress() implementieren
+2014.01.14  1:30    Walter      Kompatibilität 4.0, getAddress() implementieren
+2014.01.14  1:30    Matthias    AsyncTask für getAddress()

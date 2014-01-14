@@ -15,5 +15,8 @@
     <string name="dialog_message_position">Enter a location\r\nLatitude between -90 and 90\r\nLongitude between -180 and 180</string>
     <string name="dialog_message_connection">No internet connection</string>
     <string name="cancel">Cancel</string>
-
+    <string name="searching_start">Searching&#8230;</string>
+    <string name="searching_finished">Finished searching</string>
+    <string name="searching_no_result">Could not find an address for this location</string>
+    
 </resources>

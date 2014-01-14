@@ -10,13 +10,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,15 +29,22 @@ public class MainActivity extends Activity {
 
     private EditText txtLatitude;
     private EditText txtLongitude;
+    private TextView txtAddress;
+    private TextView txtStatus;
+    private double latitude;
+    private double longitude;
+    private String address;
+ 
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+    {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		Button btnRandom = (Button) findViewById(R.id.buttonRandom);
 		btnRandom.setOnClickListener(new OnClickListener() {
-
+			
 			@Override
 			public void onClick(View view) {
 				setRandom();
@@ -49,41 +56,26 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-
-				setAddress("");
-
-				double latitude = getDoubleValue(txtLatitude);
-				double longitude = getDoubleValue(txtLongitude);
-
-				if (!isInRange(latitude, -90.0, 90.0) || !isInRange(longitude, -180.0, 180.0))
-				{
-					displayMyAlert(R.string.dialog_message_position);
-				}
-				else if (!isNetworkConnected(getBaseContext()))
-				{
-					displayMyAlert(R.string.dialog_message_connection);
-				}
-				else
-				{
-					setAddress(getAddress(latitude, longitude));
-				}
+				setAddress();
 			}
 		});
 
 		txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
 		txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
+		txtAddress = (TextView) findViewById(R.id.textAddress);
+		txtStatus = (TextView) findViewById(R.id.textStatus);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
 		switch (item.getItemId()) {
 		case R.id.action_about:
 			navigateToAboutActivity();
@@ -93,19 +85,46 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private void setRandom() {
+	private void setRandom()
+	{
+
+		txtAddress.setText("");
+		txtStatus.setText("");
+
 		Random random = new Random();
 		txtLatitude.setText(Double.toString((random.nextDouble() * 180) - 90));
 		txtLongitude.setText(Double.toString((random.nextDouble() * 360) - 180));
 	}
 
-	private String getAddress(double latitude, double longitude) {
+	private void setAddress()
+	{
+
+		txtAddress.setText("");
+		txtStatus.setText("");
+
+		latitude = getDoubleValue(txtLatitude);
+		longitude = getDoubleValue(txtLongitude);
+
+		if (!isInRange(latitude, -90.0, 90.0) || !isInRange(longitude, -180.0, 180.0))
+		{
+			displayMyAlert(R.string.dialog_message_position);
+		}
+		else if (!isNetworkConnected(getBaseContext()))
+		{
+			displayMyAlert(R.string.dialog_message_connection);
+		}
+		else
+		{
+			new Worker().execute();
+		}
+	}
+
+	private String getAddress(double latitude, double longitude)
+	{
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 		try
 		{
-			Log.w("LocationFinder", "before getFromLocation()");
 			List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-			Log.w("LocationFinder", "after getFromLocation(), " + addresses.toString());
 			if (!addresses.isEmpty())
 			{
 				Address address = addresses.get(0);
@@ -117,22 +136,12 @@ public class MainActivity extends Activity {
 				}
 				return sb.toString();
 			}
-		} catch(Exception e) {
-			Log.w("LocationFinder", e.getMessage());
-		}
-//		StringBuffer sb = new StringBuffer();
-//		sb.append("Oberseestrasse 10\r\n");
-//		sb.append("8650 Rapperswil\r\n");
-//		return sb.toString();
-		return "";
+		} catch(Exception e) { }
+		return null;
 	}
 
-	private void setAddress(String address) {
-		TextView txtAddress = (TextView) findViewById(R.id.textAddress);
-		txtAddress.setText(address);
-	}
-
-	private boolean isNetworkConnected(Context context) {
+	private boolean isNetworkConnected(Context context)
+	{
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo network = cm.getActiveNetworkInfo();
 		if (network != null) {
@@ -141,7 +150,8 @@ public class MainActivity extends Activity {
 		return false;
 	}
 
-	private void displayMyAlert(int messageId) {
+	private void displayMyAlert(int messageId)
+	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(messageId);
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -154,7 +164,8 @@ public class MainActivity extends Activity {
 		builder.create().show();
 	}
 
-	private void navigateToAboutActivity() {
+	private void navigateToAboutActivity()
+	{
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
 	}
@@ -173,5 +184,41 @@ public class MainActivity extends Activity {
 	private static boolean isInRange(double value, double minValue, double maxValue)
 	{
 		return value >= minValue && value <= maxValue;
+	}
+	
+	class Worker extends AsyncTask<Void, Integer, Void>
+	{
+		@Override
+		protected void onPreExecute()
+		{
+			super.onPreExecute();
+			txtStatus.setText(R.string.searching_start);
+		}
+
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			super.onPostExecute(result);
+			if (address != null)
+			{
+				txtAddress.setText(address);
+				txtStatus.setText("");
+			} else {
+				txtStatus.setText(R.string.searching_no_result);
+			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0)
+		{
+			address = getAddress(latitude, longitude);
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values)
+		{
+			super.onProgressUpdate(values);
+		}
 	}
 }

@@ -77,4 +77,13 @@
         <requestFocus />
     </EditText>
 
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonRandom"
+        android:layout_below="@+id/textAddress"
+        android:layout_marginTop="20dp"
+        android:textSize="@dimen/label_text_size" />
+
 </RelativeLayout>
