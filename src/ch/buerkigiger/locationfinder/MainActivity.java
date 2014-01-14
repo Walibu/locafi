@@ -27,7 +27,10 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	@Override
+    private EditText txtLatitude;
+    private EditText txtLongitude;
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -46,16 +49,13 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				EditText txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
-				EditText txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
 
-				String strLatitude = txtLatitude.getText().toString();
-				String strLongitude = txtLongitude.getText().toString();
-
-				// clear previous address, TODO clear only if position has changed
 				setAddress("");
 
-				if (strLatitude.isEmpty() || strLongitude.isEmpty())
+				double latitude = getDoubleValue(txtLatitude);
+				double longitude = getDoubleValue(txtLongitude);
+
+				if (!isInRange(latitude, -90.0, 90.0) || !isInRange(longitude, -180.0, 180.0))
 				{
 					displayMyAlert(R.string.dialog_message_position);
 				}
@@ -65,13 +65,13 @@ public class MainActivity extends Activity {
 				}
 				else
 				{
-					double latitude = Double.parseDouble(strLatitude);
-					double longitude = Double.parseDouble(strLongitude);
 					setAddress(getAddress(latitude, longitude));
 				}
 			}
 		});
 
+		txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
+		txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
 	}
 
 	@Override
@@ -94,8 +94,6 @@ public class MainActivity extends Activity {
 	}
 
 	private void setRandom() {
-		EditText txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
-		EditText txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
 		Random random = new Random();
 		txtLatitude.setText(Double.toString((random.nextDouble() * 180) - 90));
 		txtLongitude.setText(Double.toString((random.nextDouble() * 360) - 180));
@@ -159,5 +157,21 @@ public class MainActivity extends Activity {
 	private void navigateToAboutActivity() {
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
+	}
+
+	private static double getDoubleValue(EditText textField)
+	{
+		String strValue = textField.getText().toString();
+		if (strValue.isEmpty() || strValue.isEmpty())
+		{
+			return Double.MAX_VALUE;
+		}
+		return Double.parseDouble(strValue);
+	}
+
+	
+	private static boolean isInRange(double value, double minValue, double maxValue)
+	{
+		return value >= minValue && value <= maxValue;
 	}
 }
