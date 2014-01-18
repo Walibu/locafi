@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -188,22 +189,26 @@ public class MainActivity extends Activity {
 	
 	class Worker extends AsyncTask<Void, Integer, Void>
 	{
+		private ProgressDialog progress;
+		
 		@Override
 		protected void onPreExecute()
 		{
 			super.onPreExecute();
-			txtStatus.setText(R.string.searching_start);
-		}
+            progress = ProgressDialog.show(MainActivity.this, getText(R.string.searching_progress_title), getText(R.string.searching_progress_message), true);
+        }
 
 		@Override
 		protected void onPostExecute(Void result)
 		{
 			super.onPostExecute(result);
+			progress.dismiss();
 			if (address != null)
 			{
 				txtAddress.setText(address);
-				txtStatus.setText("");
-			} else {
+			}
+			else
+			{
 				txtStatus.setText(R.string.searching_no_result);
 			}
 		}
