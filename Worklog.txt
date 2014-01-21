@@ -6,3 +6,5 @@
 2014.01.14  1:30    Matthias    Up-Button, getAddress() implementieren
 2014.01.14  1:30    Walter      Kompatibilität 4.0, getAddress() implementieren
 2014.01.14  1:30    Matthias    AsyncTask für getAddress()
+2014.01.18  0:15    Matthias    Progress-Dialog
+2014.01.18  2:00    Matthias    Layout überarbeiten
