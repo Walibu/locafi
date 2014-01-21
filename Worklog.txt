@@ -1,4 +1,3 @@
-
 2014.01.07  3:00    Matthias    Erster Wurf Design, Random und fake Get Address (A1-A3)
 2014.01.07  1:00    Walter      Setup Android Project, and github version management
 2014.01.10  2:30    Walter      About Screen, (A4)
@@ -8,3 +7,4 @@
 2014.01.14  1:30    Matthias    AsyncTask für getAddress()
 2014.01.18  0:15    Matthias    Progress-Dialog
 2014.01.18  2:00    Matthias    Layout überarbeiten
+2014.01.18  1:00    Matthias    Landscape-Layout
