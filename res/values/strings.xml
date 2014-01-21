@@ -12,7 +12,7 @@
     <string name="author_2">Walter Bürki</string>
     <string name="author_1_email">matthias@giger.net</string>
     <string name="author_2_email">walter@fambu.ch</string>
-    <string name="dialog_message_position">Enter a location\r\nLatitude between -90 and 90\r\nLongitude between -180 and 180</string>
+    <string name="dialog_message_position">Enter a location:\r\n• Latitude between -90 and 90\r\n• Longitude between -180 and 180</string>
     <string name="dialog_message_connection">No internet connection</string>
     <string name="cancel">Cancel</string>
     <string name="searching_progress_title">Location Service</string>
