@@ -81,6 +81,9 @@ public class MainActivity extends Activity {
 		case R.id.action_about:
 			navigateToAboutActivity();
 			return true;
+		case R.id.current_location:
+			getCurrentLocation();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -169,6 +172,12 @@ public class MainActivity extends Activity {
 	{
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
+	}
+	
+	private void getCurrentLocation()
+	{
+		
+		return;
 	}
 
 	private static double getDoubleValue(EditText textField)
