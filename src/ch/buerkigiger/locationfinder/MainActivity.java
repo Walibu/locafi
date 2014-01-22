@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
 			navigateToAboutActivity();
 			return true;
 		case R.id.current_location:
-			getCurrentLocation();
+			updateLocation();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -174,10 +174,9 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-	private void getCurrentLocation()
+	private void updateLocation()
 	{
-		
-		return;
+		new MyLocation().UpdateLocation(getBaseContext(), txtLatitude, txtLongitude);
 	}
 
 	private static double getDoubleValue(EditText textField)

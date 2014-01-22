@@ -3,8 +3,9 @@
 2014.01.10  2:30    Walter      About Screen, (A4)
 2014.01.11  2:00    Walter      Add alertDialog, check internet connection
 2014.01.14  1:30    Matthias    Up-Button, getAddress() implementieren
-2014.01.14  1:30    Walter      Kompatibilität 4.0, getAddress() implementieren
-2014.01.14  1:30    Matthias    AsyncTask für getAddress()
+2014.01.14  1:30    Walter      Kompatibilitï¿½t 4.0, getAddress() implementieren
+2014.01.14  1:30    Matthias    AsyncTask fï¿½r getAddress()
 2014.01.18  0:15    Matthias    Progress-Dialog
-2014.01.18  2:00    Matthias    Layout überarbeiten
+2014.01.18  2:00    Matthias    Layout ï¿½berarbeiten
 2014.01.18  1:00    Matthias    Landscape-Layout
+2014.01.22  2:00    Walter      Get LastLocation eingefÃ¼gt, funktioniert bis und mit Connection to Google Services, Icon fehlt
