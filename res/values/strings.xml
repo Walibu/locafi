@@ -3,22 +3,29 @@
 
     <string name="app_name">LocationFinder</string>
     <string name="action_about">About</string>
+    <string name="action_location">Location</string>
+    <string name="action_main">Main</string>
     <string name="text_latitude">Latitude</string>
     <string name="text_longitude">Longitude</string>
+    <string name="text_address">Address</string>
     <string name="button_random">Random</string>
     <string name="button_getaddress">Get Address</string>
+    <string name="button_clear">Reset</string>
+    <string name="button_getlocation">Get Location</string>
     <string name="title_activity_about">About LocationFinder</string>
     <string name="author_1">Matthias Giger</string>
     <string name="author_2">Walter Bürki</string>
     <string name="author_1_email">matthias@giger.net</string>
     <string name="author_2_email">walter@fambu.ch</string>
-    <string name="dialog_message_position">Enter a location:\r\n• Latitude between -90 and 90\r\n• Longitude between -180 and 180</string>
+    <string name="dialog_message_position">Please enter a location:\r\n• Latitude between -90 and 90\r\n• Longitude between -180 and 180</string>
     <string name="dialog_message_connection">No internet connection</string>
+    <string name="dialog_message_address">Please enter an address</string>
     <string name="cancel">Cancel</string>
     <string name="searching_progress_title">Location Service</string>
     <string name="searching_progress_message">Searching&#8230;</string>
     <string name="searching_finished">Finished searching</string>
     <string name="searching_no_result">Could not find an address for this location</string>
+    <string name="searching_no_result_location">Could not find an location for this address</string>
     <string name="my_location">MyPos</string>
     
 </resources>

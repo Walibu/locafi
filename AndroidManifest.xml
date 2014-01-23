@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="ch.buerkigiger.locationfinder.LocationActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
             android:name="ch.buerkigiger.locationfinder.AboutActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName="ch.buerkigiger.locationfinder.MainActivity" >

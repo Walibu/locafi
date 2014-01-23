@@ -2,7 +2,6 @@ package ch.buerkigiger.locationfinder;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import ch.buerkigiger.locationfinder.AboutActivity;
 import ch.buerkigiger.locationfinder.R;
@@ -26,14 +25,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class LocationActivity extends Activity {
 
-    private EditText txtLatitude;
-    private EditText txtLongitude;
-    private TextView txtAddress;
+    private EditText txtAddress;
+    private TextView txtLocation;
     private TextView txtStatus;
-    private double latitude;
-    private double longitude;
     private String address;
  
 
@@ -41,14 +37,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState)
     {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_location);
 
-		Button btnRandom = (Button) findViewById(R.id.buttonRandom);
-		btnRandom.setOnClickListener(new OnClickListener() {
+		Button btnClear = (Button) findViewById(R.id.buttonClear);
+		btnClear.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View view) {
-				setRandom();
+				clearFields();
 			}
 		});
 
@@ -57,20 +53,19 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				setAddress();
+				setLocation();
 			}
 		});
 
-		txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
-		txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
-		txtAddress = (TextView) findViewById(R.id.textAddress);
+		txtAddress = (EditText) findViewById(R.id.editTextAddress);
+		txtLocation = (TextView) findViewById(R.id.textLocation);
 		txtStatus = (TextView) findViewById(R.id.textStatus);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.location, menu);
 		return true;
 	}
 
@@ -78,43 +73,37 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		switch (item.getItemId()) {
+		case R.id.action_main:
+			navigateToMainActivity();
+			return true;
 		case R.id.action_about:
 			navigateToAboutActivity();
-			return true;
-		case R.id.action_location:
-			navigateToLocationFromAddressActivity();
-			return true;
-		case R.id.current_location:
-			updateLocation();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	private void setRandom()
+	private void clearFields()
 	{
-
 		txtAddress.setText("");
+		txtLocation.setText("");
 		txtStatus.setText("");
 
-		Random random = new Random();
-		txtLatitude.setText(Double.toString((random.nextDouble() * 180) - 90));
-		txtLongitude.setText(Double.toString((random.nextDouble() * 360) - 180));
+		txtAddress.requestFocus();
 	}
 
-	private void setAddress()
+	private void setLocation()
 	{
 
-		txtAddress.setText("");
+		txtLocation.setText("");
 		txtStatus.setText("");
 
-		latitude = getDoubleValue(txtLatitude);
-		longitude = getDoubleValue(txtLongitude);
+		address = txtAddress.getText().toString();
 
-		if (!isInRange(latitude, -90.0, 90.0) || !isInRange(longitude, -180.0, 180.0))
+		if (address.isEmpty())
 		{
-			displayMyAlert(R.string.dialog_message_position);
+			displayMyAlert(R.string.dialog_message_address);
 		}
 		else if (!isNetworkConnected(getBaseContext()))
 		{
@@ -126,16 +115,22 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private String getAddress(double latitude, double longitude)
+	private String getAddress(String locationName)
 	{
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 		try
 		{
-			List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+			List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
 			if (!addresses.isEmpty())
 			{
 				Address address = addresses.get(0);
 				StringBuffer sb = new StringBuffer();
+				sb.append(getText(R.string.text_latitude) + ": ");
+				sb.append(Double.toString(address.getLatitude()));
+				sb.append("\r\n");
+				sb.append(getText(R.string.text_longitude) + ": ");
+				sb.append(Double.toString(address.getLongitude()));
+				sb.append("\r\n\r\n");
 				for (int i = 0;  i <= address.getMaxAddressLineIndex(); i++)
 				{
 					sb.append(address.getAddressLine(i));
@@ -171,37 +166,16 @@ public class MainActivity extends Activity {
 		builder.create().show();
 	}
 
+	private void navigateToMainActivity()
+	{
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+	}
+	
 	private void navigateToAboutActivity()
 	{
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
-	}
-	
-	private void navigateToLocationFromAddressActivity()
-	{
-		Intent intent = new Intent(this, LocationActivity.class);
-		startActivity(intent);
-	}
-	
-	private void updateLocation()
-	{
-		new MyLocation().UpdateLocation(getBaseContext(), txtLatitude, txtLongitude);
-	}
-
-	private static double getDoubleValue(EditText textField)
-	{
-		String strValue = textField.getText().toString();
-		if (strValue.isEmpty() || strValue.isEmpty())
-		{
-			return Double.MAX_VALUE;
-		}
-		return Double.parseDouble(strValue);
-	}
-
-	
-	private static boolean isInRange(double value, double minValue, double maxValue)
-	{
-		return value >= minValue && value <= maxValue;
 	}
 	
 	class Worker extends AsyncTask<Void, Integer, Void>
@@ -212,7 +186,7 @@ public class MainActivity extends Activity {
 		protected void onPreExecute()
 		{
 			super.onPreExecute();
-            progress = ProgressDialog.show(MainActivity.this, getText(R.string.searching_progress_title), getText(R.string.searching_progress_message), true);
+            progress = ProgressDialog.show(LocationActivity.this, getText(R.string.searching_progress_title), getText(R.string.searching_progress_message), true);
         }
 
 		@Override
@@ -222,7 +196,7 @@ public class MainActivity extends Activity {
 			progress.dismiss();
 			if (address != null)
 			{
-				txtAddress.setText(address);
+				txtLocation.setText(address);
 			}
 			else
 			{
@@ -233,7 +207,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... arg0)
 		{
-			address = getAddress(latitude, longitude);
+			address = getAddress(address);
 			return null;
 		}
 
