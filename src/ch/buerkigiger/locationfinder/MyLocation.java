@@ -23,10 +23,8 @@ import android.widget.Toast;
 public class MyLocation extends FragmentActivity  implements
 	GooglePlayServicesClient.ConnectionCallbacks,
 	GooglePlayServicesClient.OnConnectionFailedListener {
-    /*
-     * Define a request code to send to Google Play services
-     * This code is returned in Activity.onActivityResult
-     */
+
+	// Define a request code to send to Google Play services, This code is returned in Activity.onActivityResult
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     
     private LocationClient mLocationClient;
@@ -70,23 +68,12 @@ public class MyLocation extends FragmentActivity  implements
         }
     }
 
-    /*
-     * Called by Location Services when the request to connect the
-     * client finishes successfully. At this point, you can
-     * request the current location or start periodic updates
-     */
     @Override
     public void onConnected(Bundle dataBundle) {
-        // Display the connection status
-        Toast.makeText(mContext, "Connected", Toast.LENGTH_SHORT).show();
-        
         if (servicesConnected(mContext))
-        {
-	        Toast.makeText(mContext, "Google service ok", Toast.LENGTH_SHORT).show();
-	        
-	        Location myLocation = mLocationClient.getLastLocation();
-	        
-	        if (myLocation != null)
+		{
+			Location myLocation = mLocationClient.getLastLocation();
+			if (myLocation != null)
 			{
 				Double latitude = myLocation.getLatitude();
 				Double longitue = myLocation.getLongitude();
@@ -95,78 +82,61 @@ public class MyLocation extends FragmentActivity  implements
 				
 				Toast.makeText(mContext, "Position updated", Toast.LENGTH_SHORT).show();
 			}
-        }
+			else
+			{
+				Toast.makeText(mContext, "No Position available", Toast.LENGTH_SHORT).show();
+			}
+		}
+		else
+		{
+			Toast.makeText(mContext, "Google Service not connected", Toast.LENGTH_SHORT).show();
+		}
     }
 
-    /*
-     * Called by Location Services if the connection to the
-     * location client drops because of an error.
-     */
     @Override
     public void onDisconnected() {
         // Display the connection status
         Toast.makeText(mContext, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
     }
 
-    /*
-     * Called by Location Services if the attempt to
-     * Location Services fails.
-     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        /*
-         * Google Play services can resolve some errors it detects.
-         * If the error has a resolution, try sending an Intent to
-         * start a Google Play services activity that can resolve
-         * error.
-         */
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
                 connectionResult.startResolutionForResult(
                         this,
                         CONNECTION_FAILURE_RESOLUTION_REQUEST);
-                /*
-                 * Thrown if Google Play services canceled the original
-                 * PendingIntent
-                 */
             } catch (IntentSender.SendIntentException e) {
                 // Log the error
                 e.printStackTrace();
             }
         } else {
-            /*
-             * If no resolution is available, display a dialog to the
-             * user with the error.
-             */
+        	// no resolution available
         	displayError("Unknown error: " + connectionResult.getErrorCode());
         }
     }
 
-    /*
-     * Handle results returned to the FragmentActivity
-     * by Google Play services
-     */
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         // Decide what to do based on the original request code
         switch (requestCode) {
-
-            case CONNECTION_FAILURE_RESOLUTION_REQUEST :
-            /*
-             * If the result code is Activity.RESULT_OK, try
-             * to connect again
-             */
-                switch (resultCode) {
-                    case Activity.RESULT_OK :
-                    /*
-                     * Try the request again
-                     */
-                    Toast.makeText(mContext, "Resultion request, try again", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-        }
+        case CONNECTION_FAILURE_RESOLUTION_REQUEST:
+        	// if the result code is Activity.RESULT_OK, try to connect again
+            switch (resultCode) {
+            case Activity.RESULT_OK :
+            	Toast.makeText(mContext, "Resultion request, try again", Toast.LENGTH_SHORT).show();
+            	break;
+            default:
+            	Toast.makeText(mContext, "Result code: " + getString(resultCode), Toast.LENGTH_SHORT).show();
+            	break;
+            } // end of switch (resultCode)
+            break;
+        default:
+        	Toast.makeText(mContext, "Request code: " + getString(requestCode), Toast.LENGTH_SHORT).show();
+        	break;
+        } // end of switch (requestCode)
      }
 
 	private void displayError(CharSequence message)
@@ -189,15 +159,16 @@ public class MyLocation extends FragmentActivity  implements
         // If Google Play services is available
         if (ConnectionResult.SUCCESS == resultCode) {
             // In debug mode, log the status
-            Log.d("Location Updates", "Google Play services is available.");
+            Log.d("LocationFinder", "Google Play services is available.");
 
             return true;
         // Google Play services was not available for some reason
         } else {
-            // Get the error code
-            int errorCode = ConnectionResult.B.getErrorCode();
-            // Get the error dialog from Google Play services
-            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+			// Get the error code
+			int errorCode = ConnectionResult.jZ.getErrorCode();  // with new google-play-service_lib
+			//int errorCode = ConnectionResult.B.getErrorCode(); // with Hsr google-play-service_lib
+			// Get the error dialog from Google Play services
+			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
                     errorCode,
                     this,
                     CONNECTION_FAILURE_RESOLUTION_REQUEST);
