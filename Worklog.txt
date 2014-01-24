@@ -9,3 +9,4 @@
 2014.01.18  2:00    Matthias    Layout überarbeiten
 2014.01.18  1:00    Matthias    Landscape-Layout
 2014.01.22  2:00    Walter      Get LastLocation eingefügt, funktioniert bis und mit Connection to Google Services, Icon fehlt
+2014.01.24  3:00    Walter      Fixed GetLastLocation und AlertDialog Message
