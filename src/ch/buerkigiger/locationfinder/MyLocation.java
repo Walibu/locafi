@@ -4,6 +4,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,7 +24,8 @@ import android.widget.Toast;
 
 public class MyLocation extends FragmentActivity  implements
 	GooglePlayServicesClient.ConnectionCallbacks,
-	GooglePlayServicesClient.OnConnectionFailedListener {
+	GooglePlayServicesClient.OnConnectionFailedListener,
+	LocationListener {
 
 	// Define a request code to send to Google Play services, this code is returned in Activity.onActivityResult
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -78,12 +80,15 @@ public class MyLocation extends FragmentActivity  implements
 			{
 				Double latitude = myLocation.getLatitude();
 				Double longitue = myLocation.getLongitude();
+				Integer accuracy = ((Float)myLocation.getAccuracy()).intValue();
 				
 				// add position into given text fields
 				mTxtLatitude.setText(latitude.toString());
 				mTxtLongitude.setText(longitue.toString());
 				
-				Toast.makeText(mActivity, R.string.position_updated, Toast.LENGTH_SHORT).show();
+				Toast.makeText(mActivity,
+					mActivity.getText(R.string.position_updated) +
+					accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
 			}
 			else
 			{
@@ -137,6 +142,17 @@ public class MyLocation extends FragmentActivity  implements
         	break;
         } // end of switch (requestCode)
      }
+    
+    @Override
+    public void onLocationChanged(Location location) {
+        // Report to the UI that the location was updated
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude()) + "," +
+                Double.toString(location.getAccuracy());
+        Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+    }
+
 
 	private void displayError(CharSequence message)
 	{

@@ -9,4 +9,5 @@
 2014.01.18  2:00    Matthias    Layout überarbeiten
 2014.01.18  1:00    Matthias    Landscape-Layout
 2014.01.22  2:00    Walter      Get LastLocation eingefügt, funktioniert bis und mit Connection to Google Services, Icon fehlt
-2014.01.24  3:00    Walter      Fixed GetLastLocation und AlertDialog Message
+2014.01.23  1:30    Walter      google-play-service Library wechslen und zum Laufen bringen
+2014.01.24  3:00    Walter      Fixed GetLastLocation, AlertDialog Message und Begin Postionsupdate bis <50m 
