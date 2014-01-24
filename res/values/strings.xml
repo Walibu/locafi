@@ -26,6 +26,8 @@
     <string name="searching_finished">Finished searching</string>
     <string name="searching_no_result">Could not find an address for this location</string>
     <string name="searching_no_result_location">Could not find an location for this address</string>
+    <string name="position_updated">Position updated</string>
+    <string name="enable_position_service">No Position available.\r\nPlease enable Google\'s Position service.\r\nSettings - Location service</string>
     <string name="my_location">MyPos</string>
     
 </resources>

@@ -185,7 +185,7 @@ public class MainActivity extends Activity {
 	
 	private void updateLocation()
 	{
-		new MyLocation().UpdateLocation(getBaseContext(), txtLatitude, txtLongitude);
+		new MyLocation().UpdateLocation(this, txtLatitude, txtLongitude);
 	}
 
 	private static double getDoubleValue(EditText textField)

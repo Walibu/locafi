@@ -20,28 +20,29 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 public class MyLocation extends FragmentActivity  implements
 	GooglePlayServicesClient.ConnectionCallbacks,
 	GooglePlayServicesClient.OnConnectionFailedListener {
 
-	// Define a request code to send to Google Play services, This code is returned in Activity.onActivityResult
+	// Define a request code to send to Google Play services, this code is returned in Activity.onActivityResult
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     
     private LocationClient mLocationClient;
-    private Context mContext;
+    private Activity mActivity;
     private EditText mTxtLatitude;
     private EditText mTxtLongitude;
     
     
-    public void UpdateLocation(Context context, EditText txtLatitude, EditText txtLongitude)
+    public void UpdateLocation(Activity activity, EditText txtLatitude, EditText txtLongitude)
     {
-    	mContext = context;
+    	mActivity = activity;
     	mTxtLatitude = txtLatitude;
     	mTxtLongitude = txtLongitude;
     	
     	if (mLocationClient == null)
     	{
-    		mLocationClient = new LocationClient(context, this, this);
+    		mLocationClient = new LocationClient(mActivity, this, this);
     	}
 
     	mLocationClient.connect();
@@ -70,33 +71,31 @@ public class MyLocation extends FragmentActivity  implements
 
     @Override
     public void onConnected(Bundle dataBundle) {
-        if (servicesConnected(mContext))
+        if (servicesConnected(mActivity))
 		{
 			Location myLocation = mLocationClient.getLastLocation();
 			if (myLocation != null)
 			{
 				Double latitude = myLocation.getLatitude();
 				Double longitue = myLocation.getLongitude();
+				
+				// add position into given text fields
 				mTxtLatitude.setText(latitude.toString());
 				mTxtLongitude.setText(longitue.toString());
 				
-				Toast.makeText(mContext, "Position updated", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mActivity, R.string.position_updated, Toast.LENGTH_SHORT).show();
 			}
 			else
 			{
-				Toast.makeText(mContext, "No Position available", Toast.LENGTH_SHORT).show();
+				displayError(mActivity.getText(R.string.enable_position_service));
 			}
-		}
-		else
-		{
-			Toast.makeText(mContext, "Google Service not connected", Toast.LENGTH_SHORT).show();
 		}
     }
 
     @Override
     public void onDisconnected() {
         // Display the connection status
-        Toast.makeText(mContext, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -126,22 +125,22 @@ public class MyLocation extends FragmentActivity  implements
         	// if the result code is Activity.RESULT_OK, try to connect again
             switch (resultCode) {
             case Activity.RESULT_OK :
-            	Toast.makeText(mContext, "Resultion request, try again", Toast.LENGTH_SHORT).show();
+            	Toast.makeText(mActivity, "Resultion request, try again", Toast.LENGTH_SHORT).show();
             	break;
             default:
-            	Toast.makeText(mContext, "Result code: " + getString(resultCode), Toast.LENGTH_SHORT).show();
+            	Toast.makeText(mActivity, "Result code: " + getString(resultCode), Toast.LENGTH_SHORT).show();
             	break;
             } // end of switch (resultCode)
             break;
         default:
-        	Toast.makeText(mContext, "Request code: " + getString(requestCode), Toast.LENGTH_SHORT).show();
+        	Toast.makeText(mActivity, "Request code: " + getString(requestCode), Toast.LENGTH_SHORT).show();
         	break;
         } // end of switch (requestCode)
      }
 
 	private void displayError(CharSequence message)
 	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 		builder.setMessage(message);
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 			@Override
@@ -167,6 +166,7 @@ public class MyLocation extends FragmentActivity  implements
 			// Get the error code
 			int errorCode = ConnectionResult.jZ.getErrorCode();  // with new google-play-service_lib
 			//int errorCode = ConnectionResult.B.getErrorCode(); // with Hsr google-play-service_lib
+			
 			// Get the error dialog from Google Play services
 			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
                     errorCode,
