@@ -9,64 +9,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    tools:context=".LocationActivity" >
 
     <RelativeLayout 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin" >
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
-            android:id="@+id/textLatitude"
-            android:layout_width="fill_parent"
+            android:id="@+id/textAddress"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textLatitude"
-            android:text="@string/text_latitude"
+            android:layout_marginTop="10dp"
+            android:text="@string/text_address"
             android:textSize="@dimen/label_text_size" />
     
         <EditText
-            android:id="@+id/editTextLatitude"
+            android:id="@+id/editTextAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textLatitude"
-            android:layout_below="@+id/textLatitude"
-            android:ems="10"
-            android:inputType="numberDecimal|numberSigned"
+            android:layout_alignLeft="@+id/textAddress"
+            android:layout_below="@+id/textAddress"
+            android:lines="3"
+            android:gravity="top"
+            android:inputType="textMultiLine|textNoSuggestions"
             android:textSize="@dimen/edit_text_size" >
+    
             <requestFocus />
         </EditText>
     
-        <TextView
-            android:id="@+id/textLongitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textLatitude"
-            android:layout_below="@+id/editTextLatitude"
-            android:layout_marginTop="10dp"
-            android:text="@string/text_longitude"
-            android:textSize="@dimen/label_text_size" />
-    
-        <EditText
-            android:id="@+id/editTextLongitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textLongitude"
-            android:layout_below="@+id/textLongitude"
-            android:ems="10"
-            android:inputType="numberDecimal|numberSigned"
-            android:textSize="@dimen/edit_text_size" />
-
         <Button
-            android:id="@+id/buttonRandom"
+            android:id="@+id/buttonClear"
             style="?android:attr/buttonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textLatitude"
-            android:layout_below="@+id/editTextLongitude"
+            android:layout_alignLeft="@+id/editTextAddress"
+            android:layout_below="@+id/editTextAddress"
             android:layout_marginTop="10dp"
-            android:text="@string/button_random"
+            android:text="@string/button_clear"
             android:textSize="@dimen/button_text_size"
             android:drawableLeft="@drawable/icon_random" />
         
@@ -75,8 +57,8 @@
             style="?android:attr/buttonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textLatitude"
-            android:layout_below="@+id/buttonRandom"
+            android:layout_alignLeft="@+id/buttonClear"
+            android:layout_below="@+id/buttonClear"
             android:layout_marginTop="5dp"
             android:text="@string/button_getaddress"
             android:textSize="@dimen/button_text_size"
@@ -93,12 +75,12 @@
         tools:context=".MainActivity" >
 
         <TextView
-            android:id="@+id/textAddress"
+            android:id="@+id/textLocation"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:textSize="@dimen/title_text_size" />
-
+    
         <TextView
             android:id="@+id/textStatus"
             android:layout_width="match_parent"
