@@ -5,6 +5,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,8 +30,17 @@ public class MyLocation extends FragmentActivity  implements
 
 	// Define a request code to send to Google Play services, this code is returned in Activity.onActivityResult
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    // Update frequency in milliseconds
+    private static final long UPDATE_INTERVAL_MS = 1000 * 5;
+    // A fast frequency ceiling in milliseconds
+    private static final long FASTEST_INTERVAL_MS = 1000 * 3;
     
+    // Required accuracy in meter
+    private final static int REQUIRED_ACCURACY_M = 50;
+
     private LocationClient mLocationClient;
+    private LocationRequest mLocationRequest;
+
     private Activity mActivity;
     private EditText mTxtLatitude;
     private EditText mTxtLongitude;
@@ -46,8 +56,19 @@ public class MyLocation extends FragmentActivity  implements
     	{
     		mLocationClient = new LocationClient(mActivity, this, this);
     	}
-
     	mLocationClient.connect();
+    	
+    	if (mLocationRequest == null)
+    	{
+			// Create the LocationRequest object
+	        mLocationRequest = LocationRequest.create();
+	        // Use high accuracy
+	        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+	        // Set the update interval
+	        mLocationRequest.setInterval(UPDATE_INTERVAL_MS);
+	        // Set the fastest update interval
+	        mLocationRequest.setFastestInterval(FASTEST_INTERVAL_MS);
+    	}
     }
     
     
@@ -78,22 +99,15 @@ public class MyLocation extends FragmentActivity  implements
 			Location myLocation = mLocationClient.getLastLocation();
 			if (myLocation != null)
 			{
-				Double latitude = myLocation.getLatitude();
-				Double longitue = myLocation.getLongitude();
-				Integer accuracy = ((Float)myLocation.getAccuracy()).intValue();
-				
-				// add position into given text fields
-				mTxtLatitude.setText(latitude.toString());
-				mTxtLongitude.setText(longitue.toString());
-				
-				Toast.makeText(mActivity,
-					mActivity.getText(R.string.position_updated) +
-					accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
+				onLocationChanged(myLocation);
 			}
 			else
 			{
 				displayError(mActivity.getText(R.string.enable_position_service));
 			}
+
+			// start location updates
+            mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		}
     }
 
@@ -145,12 +159,44 @@ public class MyLocation extends FragmentActivity  implements
     
     @Override
     public void onLocationChanged(Location location) {
-        // Report to the UI that the location was updated
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude()) + "," +
-                Double.toString(location.getAccuracy());
-        Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+    	
+		Double latitude = location.getLatitude();
+		Double longitue = location.getLongitude();
+		Integer accuracy = ((Float)location.getAccuracy()).intValue();
+		
+		// add position into given text fields
+		mTxtLatitude.setText(latitude.toString());
+		mTxtLongitude.setText(longitue.toString());
+		
+		if (accuracy < REQUIRED_ACCURACY_M) 
+		{
+			// stop location updates
+			mLocationClient.removeLocationUpdates(this);
+			
+			Toast.makeText(mActivity,
+					mActivity.getText(R.string.position_reached) +
+					accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
+			Log.d("LocationFinder", "Postion reached: " + accuracy.toString());
+		}
+		else
+		{
+			Toast.makeText(mActivity,
+				mActivity.getText(R.string.position_updated) +
+				accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
+			Log.d("LocationFinder", "Postion updated: " + accuracy.toString());
+		}
+    }
+
+    @Override
+    protected void onStop() {
+        // If the client is connected
+        if (mLocationClient.isConnected()) {
+        	// stop location updates
+        	mLocationClient.removeLocationUpdates(this);
+        	Log.d("LocationFinder", "Postion update stopped");
+        }
+        mLocationClient.disconnect();
+        super.onStop();
     }
 
 
