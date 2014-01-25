@@ -71,6 +71,15 @@ public class MyLocation extends FragmentActivity  implements
     	}
     }
     
+	public void stopLocationUpdates() {
+		// If the client is connected
+		if (mLocationClient.isConnected()) {
+			// stop location updates
+			mLocationClient.removeLocationUpdates(this);
+			Log.d("LocationFinder", "Postion update stopped");
+		}
+		mLocationClient.disconnect();
+	}
     
     // Define a DialogFragment that displays the error dialog
     public static class ErrorDialogFragment extends DialogFragment {
@@ -187,19 +196,6 @@ public class MyLocation extends FragmentActivity  implements
 		}
     }
 
-    @Override
-    protected void onStop() {
-        // If the client is connected
-        if (mLocationClient.isConnected()) {
-        	// stop location updates
-        	mLocationClient.removeLocationUpdates(this);
-        	Log.d("LocationFinder", "Postion update stopped");
-        }
-        mLocationClient.disconnect();
-        super.onStop();
-    }
-
-
 	private void displayError(CharSequence message)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
@@ -250,4 +246,3 @@ public class MyLocation extends FragmentActivity  implements
     }
 
 }
-

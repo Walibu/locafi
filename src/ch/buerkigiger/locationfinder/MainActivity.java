@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
     private double latitude;
     private double longitude;
     private String address;
+	private MyLocation myLocation;
  
 
     @Override
@@ -65,6 +66,16 @@ public class MainActivity extends Activity {
 		txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
 		txtAddress = (TextView) findViewById(R.id.textAddress);
 		txtStatus = (TextView) findViewById(R.id.textStatus);
+	}
+	
+	@Override
+	protected void onStop() {
+        if (myLocation != null)
+        {
+          // stop myLocation in case it is searching
+          myLocation.stopLocationUpdates();
+        }
+		super.onStop();
 	}
 
 	@Override
@@ -183,9 +194,12 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-	private void updateLocation()
-	{
-		new MyLocation().UpdateLocation(this, txtLatitude, txtLongitude);
+	private void updateLocation() {
+		if (myLocation == null)
+		{
+		  myLocation = new MyLocation();	
+		}
+		myLocation.UpdateLocation(this, txtLatitude, txtLongitude);
 	}
 
 	private static double getDoubleValue(EditText textField)
