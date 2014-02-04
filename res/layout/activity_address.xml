@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:text="@string/button_clear"
             android:textSize="@dimen/button_text_size"
-            android:drawableLeft="@drawable/icon_random" />
+            android:drawableLeft="@drawable/icon_clear" />
 
         <Button
             android:id="@+id/buttonLocation"

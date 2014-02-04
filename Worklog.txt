@@ -10,5 +10,7 @@
 2014.01.18  1:00    Matthias    Landscape-Layout
 2014.01.22  2:00    Walter      Get LastLocation eingefügt, funktioniert bis und mit Connection to Google Services, Icon fehlt
 2014.01.23  1:30    Walter      google-play-service Library wechslen und zum Laufen bringen
+2014.01.23  2:00    Matthias    Activity Koordinaten über Adresse
 2014.01.24  3:00    Walter      Fixed GetLastLocation, AlertDialog Message und Begin Postionsupdate bis <50m 
 2014.01.24  1:00    Walter      Update Location bis Genauigkeit < 50m fertig, Code cleanup nötig, remove Tabs! evt. Progressbar statt Toast bei Updates.
+2014.01.23  2:30    Matthias    Rename Files, Utility-Klasse, Menu-Icons

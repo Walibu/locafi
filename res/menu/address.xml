@@ -2,11 +2,13 @@
 
     <item
         android:id="@+id/action_about"
+        android:icon="@drawable/icon_about"
         android:orderInCategory="500"
         android:showAsAction="ifRoom"
         android:title="@string/action_about"/>
     <item
         android:id="@+id/action_location"
+        android:icon="@drawable/icon_location"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/action_location"/>
