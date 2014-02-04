@@ -23,7 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class MyLocation extends FragmentActivity  implements
+public class LocationHelper extends FragmentActivity  implements
 	GooglePlayServicesClient.ConnectionCallbacks,
 	GooglePlayServicesClient.OnConnectionFailedListener,
 	LocationListener {

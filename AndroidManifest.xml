@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="ch.buerkigiger.locationfinder.MainActivity"
+            android:name="ch.buerkigiger.locationfinder.LocationActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ch.buerkigiger.locationfinder.LocationActivity"
+            android:name="ch.buerkigiger.locationfinder.AddressActivity"
             android:label="@string/app_name">
         </activity>
         <activity
             android:name="ch.buerkigiger.locationfinder.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="ch.buerkigiger.locationfinder.MainActivity" >
+            android:parentActivityName="ch.buerkigiger.locationfinder.LocationActivity" >
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
-				android:value="ch.buerkigiger.locationfinder.MainActivity" />
+				android:value="ch.buerkigiger.locationfinder.LocationActivity" />
         </activity>
     </application>
 </manifest>

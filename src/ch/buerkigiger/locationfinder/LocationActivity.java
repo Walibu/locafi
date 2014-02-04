@@ -2,6 +2,7 @@ package ch.buerkigiger.locationfinder;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import ch.buerkigiger.locationfinder.AboutActivity;
 import ch.buerkigiger.locationfinder.R;
@@ -27,10 +28,14 @@ import android.widget.TextView;
 
 public class LocationActivity extends Activity {
 
-    private EditText txtAddress;
-    private TextView txtLocation;
+    private EditText txtLatitude;
+    private EditText txtLongitude;
+    private TextView txtAddress;
     private TextView txtStatus;
+    private double latitude;
+    private double longitude;
     private String address;
+	private LocationHelper locationHelper;
  
 
     @Override
@@ -39,12 +44,12 @@ public class LocationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location);
 
-		Button btnClear = (Button) findViewById(R.id.buttonClear);
-		btnClear.setOnClickListener(new OnClickListener() {
+		Button btnRandom = (Button) findViewById(R.id.buttonRandom);
+		btnRandom.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View view) {
-				clearFields();
+				setRandom();
 			}
 		});
 
@@ -53,13 +58,24 @@ public class LocationActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				setLocation();
+				setAddress();
 			}
 		});
 
-		txtAddress = (EditText) findViewById(R.id.editTextAddress);
-		txtLocation = (TextView) findViewById(R.id.textLocation);
+		txtLatitude = (EditText) findViewById(R.id.editTextLatitude);
+		txtLongitude = (EditText) findViewById(R.id.editTextLongitude);
+		txtAddress = (TextView) findViewById(R.id.textAddress);
 		txtStatus = (TextView) findViewById(R.id.textStatus);
+	}
+	
+	@Override
+	protected void onStop() {
+        if (locationHelper != null)
+        {
+          // stop locationHelper in case it is searching
+          locationHelper.stopLocationUpdates();
+        }
+		super.onStop();
 	}
 
 	@Override
@@ -73,37 +89,43 @@ public class LocationActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		switch (item.getItemId()) {
-		case R.id.action_main:
-			navigateToMainActivity();
-			return true;
 		case R.id.action_about:
 			navigateToAboutActivity();
+			return true;
+		case R.id.action_address:
+			navigateToLocationFromAddressActivity();
+			return true;
+		case R.id.current_location:
+			updateLocation();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	private void clearFields()
+	private void setRandom()
 	{
+
 		txtAddress.setText("");
-		txtLocation.setText("");
 		txtStatus.setText("");
 
-		txtAddress.requestFocus();
+		Random random = new Random();
+		txtLatitude.setText(Double.toString((random.nextDouble() * 180) - 90));
+		txtLongitude.setText(Double.toString((random.nextDouble() * 360) - 180));
 	}
 
-	private void setLocation()
+	private void setAddress()
 	{
 
-		txtLocation.setText("");
+		txtAddress.setText("");
 		txtStatus.setText("");
 
-		address = txtAddress.getText().toString();
+		latitude = getDoubleValue(txtLatitude);
+		longitude = getDoubleValue(txtLongitude);
 
-		if (address.isEmpty())
+		if (!isInRange(latitude, -90.0, 90.0) || !isInRange(longitude, -180.0, 180.0))
 		{
-			displayMyAlert(R.string.dialog_message_address);
+			displayMyAlert(R.string.dialog_message_position);
 		}
 		else if (!isNetworkConnected(getBaseContext()))
 		{
@@ -115,22 +137,16 @@ public class LocationActivity extends Activity {
 		}
 	}
 
-	private String getAddress(String locationName)
+	private String getAddress(double latitude, double longitude)
 	{
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 		try
 		{
-			List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+			List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
 			if (!addresses.isEmpty())
 			{
 				Address address = addresses.get(0);
 				StringBuffer sb = new StringBuffer();
-				sb.append(getText(R.string.text_latitude) + ": ");
-				sb.append(Double.toString(address.getLatitude()));
-				sb.append("\r\n");
-				sb.append(getText(R.string.text_longitude) + ": ");
-				sb.append(Double.toString(address.getLongitude()));
-				sb.append("\r\n\r\n");
 				for (int i = 0;  i <= address.getMaxAddressLineIndex(); i++)
 				{
 					sb.append(address.getAddressLine(i));
@@ -166,16 +182,40 @@ public class LocationActivity extends Activity {
 		builder.create().show();
 	}
 
-	private void navigateToMainActivity()
-	{
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
-	}
-	
 	private void navigateToAboutActivity()
 	{
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
+	}
+	
+	private void navigateToLocationFromAddressActivity()
+	{
+		Intent intent = new Intent(this, AddressActivity.class);
+		startActivity(intent);
+	}
+	
+	private void updateLocation() {
+		if (locationHelper == null)
+		{
+		  locationHelper = new LocationHelper();	
+		}
+		locationHelper.UpdateLocation(this, txtLatitude, txtLongitude);
+	}
+
+	private static double getDoubleValue(EditText textField)
+	{
+		String strValue = textField.getText().toString();
+		if (strValue.isEmpty() || strValue.isEmpty())
+		{
+			return Double.MAX_VALUE;
+		}
+		return Double.parseDouble(strValue);
+	}
+
+	
+	private static boolean isInRange(double value, double minValue, double maxValue)
+	{
+		return value >= minValue && value <= maxValue;
 	}
 	
 	class Worker extends AsyncTask<Void, Integer, Void>
@@ -196,7 +236,7 @@ public class LocationActivity extends Activity {
 			progress.dismiss();
 			if (address != null)
 			{
-				txtLocation.setText(address);
+				txtAddress.setText(address);
 			}
 			else
 			{
@@ -207,7 +247,7 @@ public class LocationActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... arg0)
 		{
-			address = getAddress(address);
+			address = getAddress(latitude, longitude);
 			return null;
 		}
 
