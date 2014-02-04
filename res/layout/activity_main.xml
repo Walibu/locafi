@@ -86,7 +86,8 @@
         android:layout_alignLeft="@+id/linearLayoutButtons"
         android:layout_below="@+id/linearLayoutButtons"
         android:layout_marginTop="15dp"
-        android:textSize="@dimen/title_text_size" />
+        android:textSize="@dimen/title_text_size"
+        android:freezesText="true" />
 
     <TextView
         android:id="@+id/textStatus"
@@ -95,6 +96,7 @@
         android:layout_alignLeft="@+id/textAddress"
         android:layout_below="@+id/textAddress"
         android:layout_marginTop="20dp"
-        android:textSize="@dimen/label_text_size" />
+        android:textSize="@dimen/label_text_size"
+        android:freezesText="true" />
 
 </RelativeLayout>
