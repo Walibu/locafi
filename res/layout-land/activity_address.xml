@@ -53,7 +53,7 @@
             android:drawableLeft="@drawable/icon_random" />
         
         <Button
-            android:id="@+id/buttonAddress"
+            android:id="@+id/buttonLocation"
             style="?android:attr/buttonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
