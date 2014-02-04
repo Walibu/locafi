@@ -222,8 +222,7 @@ public class MyLocation extends FragmentActivity  implements
         // Google Play services was not available for some reason
         } else {
 			// Get the error code
-			int errorCode = ConnectionResult.jZ.getErrorCode();  // with new google-play-service_lib
-			//int errorCode = ConnectionResult.B.getErrorCode(); // with Hsr google-play-service_lib
+			int errorCode = ConnectionResult.B.getErrorCode();
 			
 			// Get the error dialog from Google Play services
 			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
