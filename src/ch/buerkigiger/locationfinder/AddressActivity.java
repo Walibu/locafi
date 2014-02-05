@@ -94,11 +94,11 @@ public class AddressActivity extends Activity {
 
 		if (address.isEmpty())
 		{
-			Utility.displayMyAlert(R.string.dialog_message_address, this);
+			Utility.displayMessage(R.string.dialog_message_address, this);
 		}
 		else if (!Utility.isNetworkConnected(getBaseContext()))
 		{
-			Utility.displayMyAlert(R.string.dialog_message_connection, this);
+			Utility.displayMessage(R.string.dialog_message_connection, this);
 		}
 		else
 		{

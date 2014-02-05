@@ -8,11 +8,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
@@ -112,7 +110,7 @@ public class LocationHelper extends FragmentActivity  implements
 			}
 			else
 			{
-				displayError(mActivity.getText(R.string.enable_position_service));
+				Utility.displayMessage(R.string.enable_position_service, mActivity);
 			}
 
 			// start location updates
@@ -140,7 +138,7 @@ public class LocationHelper extends FragmentActivity  implements
             }
         } else {
         	// no resolution available
-        	displayError("Unknown error: " + connectionResult.getErrorCode());
+        	Utility.displayMessage(R.string.dialog_message_unknown, mActivity);
         }
     }
 
@@ -196,20 +194,6 @@ public class LocationHelper extends FragmentActivity  implements
 		}
     }
 
-	private void displayError(CharSequence message)
-	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-		builder.setMessage(message);
-		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				// user cancelled the dialog
-			}
-		});
-		// display message
-		builder.create().show();
-	}
-	
     private boolean servicesConnected(Context context) {
         // Check that Google Play services is available
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);

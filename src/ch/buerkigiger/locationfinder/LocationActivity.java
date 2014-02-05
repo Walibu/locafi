@@ -116,11 +116,11 @@ public class LocationActivity extends Activity {
 
 		if (!Utility.isInRange(latitude, -90.0, 90.0) || !Utility.isInRange(longitude, -180.0, 180.0))
 		{
-			Utility.displayMyAlert(R.string.dialog_message_position, this);
+			Utility.displayMessage(R.string.dialog_message_position, this);
 		}
 		else if (!Utility.isNetworkConnected(getBaseContext()))
 		{
-			Utility.displayMyAlert(R.string.dialog_message_connection, this);
+			Utility.displayMessage(R.string.dialog_message_connection, this);
 		}
 		else
 		{

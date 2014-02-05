@@ -41,7 +41,7 @@ public class Utility
 		return false;
 	}
 
-	public static void displayMyAlert(int messageId, Context context)
+	public static void displayMessage(int messageId, Context context)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setMessage(messageId);
