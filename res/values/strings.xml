@@ -20,7 +20,7 @@
     <string name="dialog_message_position">Please enter a location:\r\n• Latitude between -90 and 90\r\n• Longitude between -180 and 180</string>
     <string name="dialog_message_connection">No internet connection</string>
     <string name="dialog_message_address">Please enter an address</string>
-    <string name="dialog_message_unknown">This function does not work with the emulator. Please use a smartphone.</string>
+    <string name="dialog_message_unknown">Google Play services out of date&#8230;</string>
     <string name="cancel">Cancel</string>
     <string name="searching_progress_title">Location Service</string>
     <string name="searching_progress_message">Searching&#8230;</string>

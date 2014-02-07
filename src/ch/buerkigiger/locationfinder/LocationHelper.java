@@ -206,7 +206,7 @@ public class LocationHelper extends FragmentActivity  implements
         // Google Play services was not available for some reason
         } else {
 			// Get the error code
-			int errorCode = ConnectionResult.B.getErrorCode();
+			int errorCode = ConnectionResult.jZ.getErrorCode();
 			
 			// Get the error dialog from Google Play services
 			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
