@@ -28,7 +28,8 @@
     <string name="searching_no_result_address">Could not find an address for this location</string>
     <string name="searching_no_result_location">Could not find a location for this address</string>
     <string name="position_updated">Position updated, +/- </string>
-    <string name="position_reached">Positionsgenauigkeit OK: </string>
+    <string name="position_reached">Position accuracy OK: </string>
+    <string name="position_not_reached">Position update does not reach required accuracy within resonable time!</string>
     <string name="enable_position_service">No Position available.\r\nPlease enable Google\'s Position service.\r\nSettings - Location service</string>
     <string name="current_position">Position</string>
     

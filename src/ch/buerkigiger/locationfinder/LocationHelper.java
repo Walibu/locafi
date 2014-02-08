@@ -33,8 +33,13 @@ public class LocationHelper extends FragmentActivity  implements
     // A fast frequency ceiling in milliseconds
     private static final long FASTEST_INTERVAL_MS = 1000 * 3;
     
+    // Maximum waiting time for update position in milliseconds
+    private static final long TIMEOUT_UPDATE_MS = 1000 * 30;
+    
     // Required accuracy in meter
     private final static int REQUIRED_ACCURACY_M = 50;
+    
+    private long mCountTimoutUpdate = 0;
 
     private LocationClient mLocationClient;
     private LocationRequest mLocationRequest;
@@ -103,18 +108,10 @@ public class LocationHelper extends FragmentActivity  implements
     public void onConnected(Bundle dataBundle) {
         if (servicesConnected(mActivity))
 		{
-			Location myLocation = mLocationClient.getLastLocation();
-			if (myLocation != null)
-			{
-				onLocationChanged(myLocation);
-			}
-			else
-			{
-				Utility.displayMessage(R.string.enable_position_service, mActivity);
-			}
-
 			// start location updates
             mLocationClient.requestLocationUpdates(mLocationRequest, this);
+            // reset counter, which counts up to max number of location updates
+            mCountTimoutUpdate = 0;
 		}
     }
 
@@ -166,32 +163,55 @@ public class LocationHelper extends FragmentActivity  implements
     
     @Override
     public void onLocationChanged(Location location) {
-    	
-		Double latitude = location.getLatitude();
-		Double longitue = location.getLongitude();
-		Integer accuracy = ((Float)location.getAccuracy()).intValue();
-		
-		// add position into given text fields
-		mTxtLatitude.setText(latitude.toString());
-		mTxtLongitude.setText(longitue.toString());
-		
-		if (accuracy < REQUIRED_ACCURACY_M) 
-		{
-			// stop location updates
-			mLocationClient.removeLocationUpdates(this);
-			
-			Toast.makeText(mActivity,
-					mActivity.getText(R.string.position_reached) +
-					accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
-			Log.d("LocationFinder", "Postion reached: " + accuracy.toString());
-		}
-		else
-		{
-			Toast.makeText(mActivity,
-				mActivity.getText(R.string.position_updated) +
-				accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
-			Log.d("LocationFinder", "Postion updated: " + accuracy.toString());
-		}
+        
+        // if timeout reached, get lastLocation
+        if (mCountTimoutUpdate > TIMEOUT_UPDATE_MS)
+        {
+            location = mLocationClient.getLastLocation();
+        }
+        
+        if (location != null)
+        {
+    		Double latitude = location.getLatitude();
+    		Double longitue = location.getLongitude();
+    		Integer accuracy = ((Float)location.getAccuracy()).intValue();
+    		
+    		// add position into given text fields
+    		mTxtLatitude.setText(latitude.toString());
+    		mTxtLongitude.setText(longitue.toString());
+    		
+    		if (accuracy < REQUIRED_ACCURACY_M) 
+    		{
+    			// required accuracy reached, stop location updates
+    			mLocationClient.removeLocationUpdates(this);
+    			
+    			Toast.makeText(mActivity,
+    					mActivity.getText(R.string.position_reached) +
+    					accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
+    			Log.d("LocationFinder", "Postion reached: " + accuracy.toString());
+    		}
+    		else if (mCountTimoutUpdate > TIMEOUT_UPDATE_MS)
+    		{
+    		    // timeout reached, stop location updates
+                mLocationClient.removeLocationUpdates(this);
+                
+                Utility.displayMessage(R.string.position_not_reached, mActivity);
+                Log.d("LocationFinder", "Postion timout: " + accuracy.toString());
+    		}
+    		else
+    		{
+    		    mCountTimoutUpdate += UPDATE_INTERVAL_MS;
+    		    
+    			Toast.makeText(mActivity,
+    				mActivity.getText(R.string.position_updated) +
+    				accuracy.toString() + "m", Toast.LENGTH_SHORT).show();
+    			Log.d("LocationFinder", "Postion updated: " + accuracy.toString());
+    		}
+        }
+        else
+        {
+            Utility.displayMessage(R.string.enable_position_service, mActivity);
+        }
     }
 
     private boolean servicesConnected(Context context) {
