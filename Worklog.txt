@@ -14,3 +14,4 @@
 2014.01.24  3:00    Walter      Fixed GetLastLocation, AlertDialog Message und Begin Postionsupdate bis <50m 
 2014.01.24  1:00    Walter      Update Location bis Genauigkeit < 50m fertig, Code cleanup nötig, remove Tabs! evt. Progressbar statt Toast bei Updates.
 2014.01.23  2:30    Matthias    Rename Files, Utility-Klasse, Menu-Icons
+2014.02.08  1:30    Walter      Refactoring LocationHelper, remove FragmentActivity

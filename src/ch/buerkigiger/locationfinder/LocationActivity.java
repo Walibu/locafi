@@ -5,6 +5,7 @@ import java.util.Random;
 import ch.buerkigiger.locationfinder.AboutActivity;
 import ch.buerkigiger.locationfinder.R;
 import ch.buerkigiger.locationfinder.Utility;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -18,7 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class LocationActivity extends Activity {
+
+public class LocationActivity extends Activity implements
+        LocationHelper.LocationReceiver {
 
     private EditText txtLatitude;
     private EditText txtLongitude;
@@ -89,12 +92,32 @@ public class LocationActivity extends Activity {
 				startActivity(new Intent(this, AddressActivity.class));
 				return true;
 			case R.id.current_position:
-				updateLocation();
+				startLocationUpdater();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
+	
+    @Override
+    public void updateLocation(Location location)
+    {
+        Double latitude = location.getLatitude();
+        Double longitude = location.getLongitude();
+        
+        // update position into text fields
+        txtLatitude.setText(latitude.toString());
+        txtLongitude.setText(longitude.toString());
+    }
+    
+    private void startLocationUpdater()
+    {
+        if (locationHelper == null)
+        {
+          locationHelper = new LocationHelper();    
+        }
+        locationHelper.startLocationUpdates(this, this);
+    }
 
 	private void setRandom()
 	{
@@ -126,14 +149,6 @@ public class LocationActivity extends Activity {
 		{
 			new Worker().execute();
 		}
-	}
-
-	private void updateLocation() {
-		if (locationHelper == null)
-		{
-		  locationHelper = new LocationHelper();	
-		}
-		locationHelper.UpdateLocation(this, txtLatitude, txtLongitude);
 	}
 
 	class Worker extends AsyncTask<Void, Integer, Void>
