@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ public class AddressActivity extends Activity {
     {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_address);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Button btnClear = (Button) findViewById(R.id.buttonClear);
 		btnClear.setOnClickListener(new OnClickListener() {
@@ -70,6 +72,10 @@ public class AddressActivity extends Activity {
 			case R.id.action_about:
 				startActivity(new Intent(this, AboutActivity.class));
 				return true;
+	        case android.R.id.home:
+	            // Respond to the action bar's Up/Home button
+	            NavUtils.navigateUpFromSameTask(this);
+	            return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
