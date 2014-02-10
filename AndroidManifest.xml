@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="ch.buerkigiger.locationfinder.LocationActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,6 +30,7 @@
         <activity
             android:name="ch.buerkigiger.locationfinder.AddressActivity"
             android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName="ch.buerkigiger.locationfinder.LocationActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
